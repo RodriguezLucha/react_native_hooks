@@ -3,13 +3,13 @@ import { Text, StyleSheet, View, FlatList } from "react-native";
 
 const ListScreen = () => {
   const pets = [
-    { name: "pet1", age: 1 },
-    { name: "pet2", age: 3 },
-    { name: "pet3", age: 3 },
-    { name: "pet4", age: 2 },
-    { name: "pet5", age: 6 },
-    { name: "pet6", age: 9 },
-    { name: "pet7", age: 10 }
+    { name: "pet 1", age: 1 },
+    { name: "pet 2", age: 3 },
+    { name: "pet 3", age: 3 },
+    { name: "pet 4", age: 2 },
+    { name: "pet 5", age: 6 },
+    { name: "pet 6", age: 9 },
+    { name: "pet 7", age: 10 }
   ];
 
   return (
