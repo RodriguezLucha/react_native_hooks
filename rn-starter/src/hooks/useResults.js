@@ -15,8 +15,10 @@ export default () => {
           f: "a"
         }
       });
+      console.log('IT WORKS');
       setResults(response.data.drinks);
     } catch (err) {
+      console.log('FAIL');
       setErrorMessage("404: Drunk");
     }
   };

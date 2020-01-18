@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, ScrollView } from "react-native";
+import { ScrollView, View, Text, StyleSheet, Image } from "react-native";
 import useResults from "../hooks/useResults";
 
 export default DrinksScreen = () => {
@@ -13,9 +13,21 @@ export default DrinksScreen = () => {
   //   });
   // };
 
+  const getItem = drink => {
+    return (
+      <View key={drink.idDrink}>
+        <Text>{drink.strDrink}</Text>
+        <Image
+          style={{ width: 200, height: 200 }}
+          source={{ uri: drink.strDrinkThumb }}
+        />
+      </View>
+    );
+  };
+
   return (
-    <>
-      <Text>{results.map(result => result.strDrink)}</Text>
+    <ScrollView>
+      {results.map(result => getItem(result))}
       {/* 
       {errorMessage ? <Text>{errorMessage}</Text> : null}
       <ScrollView>
@@ -29,7 +41,7 @@ export default DrinksScreen = () => {
           title="Big Spender"
         />
       </ScrollView> */}
-    </>
+    </ScrollView>
   );
 };
 
