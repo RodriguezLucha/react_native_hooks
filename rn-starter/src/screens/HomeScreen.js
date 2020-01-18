@@ -4,11 +4,8 @@ import { Text, StyleSheet, View, Button, TouchableOpacity } from "react-native";
 const HomeScreen = ({ navigation }) => {
   return (
     <View>
-      <Text style={styles.text}>Home Screen</Text>
-      <Button
-        onPress={() => navigation.navigate("List")}
-        title="List"
-      />
+      <Text style={styles.text}>DRANK</Text>
+      <Button onPress={() => navigation.navigate("List")} title="List" />
       <Button
         onPress={() => navigation.navigate("Components")}
         title="Components"
@@ -17,14 +14,21 @@ const HomeScreen = ({ navigation }) => {
         onPress={() => navigation.navigate("ImageScreen")}
         title="ImageScreen"
       />
-
+      <Button
+        onPress={() => navigation.navigate("DrinksScreen")}
+        title="DrinksScreen"
+      />
     </View>
   );
 };
 
+//https://dog.ceo/api/breeds/image/random
+
 const styles = StyleSheet.create({
   text: {
-    fontSize: 50
+    fontSize: 30,
+    color: "green",
+    textAlign: "center"
   }
 });
 

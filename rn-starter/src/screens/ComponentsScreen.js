@@ -18,8 +18,7 @@ const styles = StyleSheet.create({
     fontSize: 20
   },
   secondTextStyle: {
-    fontSize: 25,
-    fontFamily: "Courier New"
+    fontSize: 25
   }
 });
 
