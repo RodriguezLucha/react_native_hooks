@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { ScrollView, View, Text, StyleSheet, Image } from "react-native";
+import {
+  ScrollView,
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  Animated
+} from "react-native";
 import useResults from "../hooks/useResults";
 
 export default DrinksScreen = () => {
@@ -13,14 +20,43 @@ export default DrinksScreen = () => {
   //   });
   // };
 
+  const [fadeAnim] = useState(new Animated.Value(0)); // Initial value for opacity: 0
+
+  React.useEffect(() => {
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 10000
+    }).start();
+  }, []);
+
   const getItem = drink => {
     return (
-      <View key={drink.idDrink}>
-        <Text>{drink.strDrink}</Text>
-        <Image
-          style={{ width: 200, height: 200 }}
-          source={{ uri: drink.strDrinkThumb }}
-        />
+      <View
+        key={drink.idDrink}
+        style={{
+          flexDirection: "row",
+          height: 100,
+          padding: 20
+        }}
+      >
+        <View>
+          <Image
+            style={{
+              width: 100,
+              height: 100,
+              borderRadius: 50,
+              padding: 15
+            }}
+            source={{ uri: drink.strDrinkThumb }}
+          />
+        </View>
+        <Animated.View
+          style={{
+            opacity: fadeAnim
+          }}
+        >
+          <Text>{drink.strDrink}</Text>
+        </Animated.View>
       </View>
     );
   };
