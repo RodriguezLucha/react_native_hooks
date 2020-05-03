@@ -10,14 +10,9 @@ import {
   Animated,
 } from 'react-native';
 
-import {
-  Header,
-  Colors,
-  ReloadInstructions,
-  State,
-} from 'react-native/Libraries/NewAppScreen';
+import {Header, Colors} from 'react-native/Libraries/NewAppScreen';
 
-import {PanGestureHandler} from 'react-native-gesture-handler';
+import {PanGestureHandler, State} from 'react-native-gesture-handler';
 
 import {useSpring, animated} from 'react-spring';
 
@@ -25,6 +20,7 @@ const AnimatedView = animated(TouchableOpacity);
 
 let translateX = new Animated.Value(0);
 let translateY = new Animated.Value(0);
+
 let handleGesture = Animated.event(
   [
     {
@@ -36,6 +32,17 @@ let handleGesture = Animated.event(
   ],
   {useNativeDriver: true},
 );
+
+let handleStateChange = ({nativeEvent}) => {
+  if (nativeEvent.state === State.ACTIVE) {
+    console.log('Active');
+  }
+  if (nativeEvent.state === State.END) {
+    translateX.setValue(0);
+    translateY.setValue(0);
+  }
+  return;
+};
 
 const App: () => React$Node = () => {
   const [state, toggle] = useState(true);
@@ -78,7 +85,9 @@ const App: () => React$Node = () => {
           <View style={styles.sectionContainer}>
             <AnimatedView style={circleProps} onPress={onPress} />
             <View style={[styles.container]}>
-              <PanGestureHandler onGestureEvent={handleGesture}>
+              <PanGestureHandler
+                onGestureEvent={handleGesture}
+                onHandlerStateChange={handleStateChange}>
                 <Animated.View style={[styles.circle, circleTransformStyle]} />
               </PanGestureHandler>
             </View>
