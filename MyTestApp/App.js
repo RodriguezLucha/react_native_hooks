@@ -6,7 +6,7 @@
  * @flow strict-local
  */
 
-import React from 'react';
+import React, {useState} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -16,6 +16,7 @@ import {
   Donut,
   StatusBar,
   TouchableWithoutFeedback,
+  TouchableOpacity,
 } from 'react-native';
 
 import {
@@ -28,21 +29,28 @@ import {
 
 import {Spring, useSpring, animated} from 'react-spring';
 
-const AnimatedView = animated(View);
+const AnimatedView = animated(TouchableOpacity);
 
 const App: () => React$Node = () => {
-  const circleProps = useSpring({
-    width: 100,
-    height: 100,
-    backgroundColor: 'blue',
-    borderRadius: 100,
+  const [state, toggle] = useState(true);
+
+  let circleProps = useSpring({
+    width: state ? 200 : 50,
+    height: state ? 200 : 50,
+    backgroundColor: state ? 'green' : 'blue',
+    borderRadius: state ? 70 : 100,
+    config: {
+      mass: 3,
+    },
     from: {
       backgroundColor: 'green',
       width: 50,
       height: 50,
-      borderRadius: 100,
+      mass: 250,
     },
   });
+
+  const onPress = () => toggle(!state);
 
   return (
     <>
@@ -64,7 +72,7 @@ const App: () => React$Node = () => {
                 Edit <Text style={styles.highlight}>App.js</Text> to change this
                 screen and then come back to see your edits.
               </Text>
-              <AnimatedView style={circleProps} />
+              <AnimatedView style={circleProps} onPress={onPress} />
             </View>
             <View style={styles.sectionContainer}>
               <Text style={styles.sectionTitle}>See Your Changes</Text>
