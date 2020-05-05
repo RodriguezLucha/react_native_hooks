@@ -1,26 +1,37 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
 
-function App() {
+import clamp from "lodash-es/clamp";
+import { useSpring, animated } from "react-spring";
+import { useGesture } from "react-with-gesture";
+import "./styles.css";
+
+function Pull() {
+  const [{ xy }, set] = useSpring(() => ({ xy: [0, 0] }));
+  const bind = useGesture(({ down, delta, velocity }) => {
+    velocity = clamp(velocity, 1, 8);
+    set({
+      xy: down ? delta : [0, 0],
+      config: { mass: velocity, tension: 500 * velocity, friction: 50 },
+    });
+  });
+  function activateLasers() {
+    set({
+      xy: [100, 100],
+      config: { mass: 5, tension: 500, friction: 50 },
+    });
+    return;
+  }
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <button onClick={activateLasers}>move it!</button>
+      <animated.div
+        {...bind()}
+        style={{
+          transform: xy.interpolate((x, y) => `translate3d(${x}px,${y}px,0)`),
+        }}
+      />
+    </>
   );
 }
 
-export default App;
+export default Pull;
