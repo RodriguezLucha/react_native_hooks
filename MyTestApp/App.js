@@ -18,34 +18,11 @@ import {useSpring, animated} from 'react-spring';
 
 const AnimatedView = animated(TouchableOpacity);
 
-let translateX = new Animated.Value(0);
-let translateY = new Animated.Value(0);
-
-let handleGesture = Animated.event(
-  [
-    {
-      nativeEvent: {
-        translationX: translateX,
-        translationY: translateY,
-      },
-    },
-  ],
-  {useNativeDriver: true},
-);
-
-let handleStateChange = ({nativeEvent}) => {
-  if (nativeEvent.state === State.ACTIVE) {
-    console.log('Active');
-  }
-  if (nativeEvent.state === State.END) {
-    translateX.setValue(0);
-    translateY.setValue(0);
-  }
-  return;
-};
-
 const App: () => React$Node = () => {
   const [state, toggle] = useState(true);
+
+  const [{xy}, set] = useSpring(() => ({xy: [50, 50]}));
+  const [number, setNumber] = useState(50);
 
   let circleProps = useSpring({
     width: state ? 200 : 100,
@@ -63,17 +40,13 @@ const App: () => React$Node = () => {
     },
   });
 
-  const onPress = () => toggle(!state);
+  function activateLasers() {
+    setNumber(100);
+    return;
+  }
 
-  let circleTransformStyle = {
-    transform: [
-      {
-        translateY: translateY,
-      },
-      {
-        translateX: translateX,
-      },
-    ],
+  const onPress = () => {
+    toggle(!state);
   };
 
   return (
@@ -84,13 +57,17 @@ const App: () => React$Node = () => {
         <View style={styles.body}>
           <View style={styles.sectionContainer}>
             <AnimatedView style={circleProps} onPress={onPress} />
-            <View style={[styles.container]}>
-              <PanGestureHandler
-                onGestureEvent={handleGesture}
-                onHandlerStateChange={handleStateChange}>
-                <Animated.View style={[styles.circle, circleTransformStyle]} />
-              </PanGestureHandler>
-            </View>
+            <View style={[styles.container]} />
+            <TouchableOpacity
+              onPress={activateLasers}
+              style={{
+                width: 100,
+                height: 100,
+                backgroundColor: 'red',
+                borderRadius: 50,
+                transform: [{translateY: number}],
+              }}
+            />
           </View>
         </View>
       </ScrollView>
@@ -117,9 +94,6 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     color: Colors.dark,
   },
-  highlight: {
-    fontWeight: '700',
-  },
   circle: {
     width: 150,
     height: 150,
@@ -131,14 +105,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     flexDirection: 'column',
     backgroundColor: '#fff',
-  },
-  box: {
-    width: 150,
-    height: 150,
-    alignSelf: 'center',
-    backgroundColor: 'plum',
-    margin: 10,
-    zIndex: 200,
   },
 });
 
