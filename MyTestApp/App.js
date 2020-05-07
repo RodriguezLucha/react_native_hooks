@@ -20,9 +20,12 @@ const AnimatedView = animated(TouchableOpacity);
 
 const App: () => React$Node = () => {
   const [state, toggle] = useState(true);
+  const [state2, toggle2] = useState(true);
 
   const [{xy}, set] = useSpring(() => ({xy: [50, 50]}));
   const [number, setNumber] = useState(50);
+
+  const props = useSpring({number: state ? 0 : 100});
 
   let circleProps = useSpring({
     width: state ? 200 : 100,
@@ -39,6 +42,29 @@ const App: () => React$Node = () => {
       mass: 250,
     },
   });
+  let circleProps2 = useSpring({
+    width: state2 ? 200 : 100,
+    height: state2 ? 200 : 100,
+    backgroundColor: state2 ? 'green' : 'blue',
+    borderRadius: state2 ? 70 : 100,
+    config: {
+      mass: 3,
+    },
+    from: {
+      backgroundColor: 'green',
+      width: 100,
+      height: 100,
+      mass: 250,
+    },
+  });
+
+  // let secondCircleProps = useSpring({
+  //   width: 100,
+  //   height: 100,
+  //   backgroundColor: 'red',
+  //   borderRadius: 50,
+  //   transform: [{translateY: state ? 50 : 200}],
+  // });
 
   function activateLasers() {
     setNumber(100);
@@ -47,6 +73,9 @@ const App: () => React$Node = () => {
 
   const onPress = () => {
     toggle(!state);
+  };
+  const onPress2 = () => {
+    toggle2(!state2);
   };
 
   return (
@@ -58,16 +87,7 @@ const App: () => React$Node = () => {
           <View style={styles.sectionContainer}>
             <AnimatedView style={circleProps} onPress={onPress} />
             <View style={[styles.container]} />
-            <TouchableOpacity
-              onPress={activateLasers}
-              style={{
-                width: 100,
-                height: 100,
-                backgroundColor: 'red',
-                borderRadius: 50,
-                transform: [{translateY: number}],
-              }}
-            />
+            <AnimatedView style={circleProps2} onPress={onPress2} />
           </View>
         </View>
       </ScrollView>
