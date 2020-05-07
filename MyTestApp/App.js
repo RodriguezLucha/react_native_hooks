@@ -14,7 +14,7 @@ import {Header, Colors} from 'react-native/Libraries/NewAppScreen';
 
 import {PanGestureHandler, State} from 'react-native-gesture-handler';
 
-import {useSpring, animated} from 'react-spring';
+import {useSpring, animated} from 'react-spring/native';
 
 const AnimatedView = animated(TouchableOpacity);
 
@@ -43,9 +43,9 @@ const App: () => React$Node = () => {
     },
   });
   let circleProps2 = useSpring({
-    width: state2 ? 200 : 100,
-    height: state2 ? 200 : 100,
-    backgroundColor: state2 ? 'green' : 'blue',
+    width: state2 ? 100 : 100,
+    height: state2 ? 100 : 100,
+    backgroundColor: state2 ? 'red' : 'blue',
     borderRadius: state2 ? 70 : 100,
     config: {
       mass: 3,
@@ -78,6 +78,21 @@ const App: () => React$Node = () => {
     toggle2(!state2);
   };
 
+  const style = {
+    backgroundColor: 'red',
+    height: 100,
+    width: 100,
+  };
+
+  const motionProps = useSpring({
+    translateY: state2 ? 200 : 100,
+    from: {translateY: 20},
+  });
+  const motionStyle = {
+    ...style,
+    transform: [{translateY: motionProps.translateY}],
+  };
+
   return (
     <>
       <ScrollView
@@ -87,7 +102,8 @@ const App: () => React$Node = () => {
           <View style={styles.sectionContainer}>
             <AnimatedView style={circleProps} onPress={onPress} />
             <View style={[styles.container]} />
-            <AnimatedView style={circleProps2} onPress={onPress2} />
+            <AnimatedView style={circleProps2} />
+            <AnimatedView style={motionStyle} onPress={onPress2} />
           </View>
         </View>
       </ScrollView>
