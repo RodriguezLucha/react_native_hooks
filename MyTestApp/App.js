@@ -85,6 +85,11 @@ const App: () => React$Node = () => {
     let {nativeEvent} = evt;
     setPositionValue(nativeEvent.translationY);
   };
+  let onHandlerStateChange = ({nativeEvent}) => {
+    if (nativeEvent.state === State.END) {
+      setPositionValue(0);
+    }
+  };
   const motionStyle = {
     ...style,
     transform: [{translateY: propsPos.translateY}],
@@ -99,7 +104,9 @@ const App: () => React$Node = () => {
           <View style={styles.sectionContainer}>
             <AnimatedView style={circleProps} onPress={onPress} />
 
-            <PanGestureHandler onGestureEvent={handleGesture}>
+            <PanGestureHandler
+              onGestureEvent={handleGesture}
+              onHandlerStateChange={onHandlerStateChange}>
               <View>
                 <AnimatedView2 style={motionStyle} />
               </View>
