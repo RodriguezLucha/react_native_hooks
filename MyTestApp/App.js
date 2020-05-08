@@ -17,10 +17,12 @@ import {PanGestureHandler, State} from 'react-native-gesture-handler';
 import {useSpring, animated} from 'react-spring/native';
 
 const AnimatedView = animated(TouchableOpacity);
+const AnimatedView2 = animated(View);
 
 const App: () => React$Node = () => {
   const [state, toggle] = useState(true);
   const [state2, toggle2] = useState(true);
+  const [positionValue, setPositionValue] = useState(0);
 
   const [{xy}, set] = useSpring(() => ({xy: [50, 50]}));
   const [number, setNumber] = useState(50);
@@ -58,14 +60,6 @@ const App: () => React$Node = () => {
     },
   });
 
-  // let secondCircleProps = useSpring({
-  //   width: 100,
-  //   height: 100,
-  //   backgroundColor: 'red',
-  //   borderRadius: 50,
-  //   transform: [{translateY: state ? 50 : 200}],
-  // });
-
   function activateLasers() {
     setNumber(100);
     return;
@@ -84,13 +78,16 @@ const App: () => React$Node = () => {
     width: 100,
   };
 
-  const motionProps = useSpring({
-    translateY: state2 ? 200 : 100,
-    from: {translateY: 20},
+  let propsPos = useSpring({
+    translateY: positionValue,
   });
+  let handleGesture = evt => {
+    let {nativeEvent} = evt;
+    setPositionValue(nativeEvent.translationY);
+  };
   const motionStyle = {
     ...style,
-    transform: [{translateY: motionProps.translateY}],
+    transform: [{translateY: propsPos.translateY}],
   };
 
   return (
@@ -101,9 +98,13 @@ const App: () => React$Node = () => {
         <View style={styles.body}>
           <View style={styles.sectionContainer}>
             <AnimatedView style={circleProps} onPress={onPress} />
-            <View style={[styles.container]} />
-            <AnimatedView style={circleProps2} />
-            <AnimatedView style={motionStyle} onPress={onPress2} />
+
+            <PanGestureHandler onGestureEvent={handleGesture}>
+              <View>
+                <AnimatedView2 style={motionStyle} />
+              </View>
+            </PanGestureHandler>
+            <Text>{positionValue}</Text>
           </View>
         </View>
       </ScrollView>
